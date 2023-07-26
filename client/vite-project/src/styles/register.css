@@ -11,7 +11,7 @@ body {
   
   .title {
     text-align: center;
-    font-size: 225%;
+    font-size: 250%;
     padding: 30px;
   }
   
@@ -28,6 +28,7 @@ body {
   }
   
   .login-register-button {
+    text-decoration: none;
     border-radius: 8px;
     border: 1px solid transparent;
     padding: 0.6em 1.2em;
@@ -36,12 +37,5 @@ body {
     font-family: inherit;
     background-color: #ed762e;
     color: black;
-    cursor: pointer;
-    transition: border-color 0.25s;
     margin-top: 10px;
-  }
-  
-  .login-register-button:hover {
-    border-color: #535bf2;
-    text-decoration: none;
   }
