@@ -2,7 +2,7 @@ import React from 'react';
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import Login from './pages/LoginPage';
 import Dashboard from './pages/Dashboard';
-import RegisterForm from './components/RegisterForm';
+import Register from './pages/RegisterPage';
 import './App.css'
 
 function App() {
@@ -10,7 +10,7 @@ function App() {
     <Router>
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/register" element={<RegisterForm />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
     </Router>

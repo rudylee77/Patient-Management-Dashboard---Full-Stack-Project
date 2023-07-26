@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import axios from 'axios';
+import '../styles/register.css';
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -32,7 +33,7 @@ const Register = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit">Register</button>
+        <button type="submit" className="login-register-button">Register</button>
       </form>
     </div>
   );
