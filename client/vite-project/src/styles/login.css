@@ -5,7 +5,8 @@ body {
 }
 
 .container {
-  max-width: 500px;
+  min-width: 450px;
+  max-width: 450px;
 }
 
 .title {

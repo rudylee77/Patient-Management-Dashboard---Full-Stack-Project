@@ -5,12 +5,13 @@ body {
   }
   
   .container {
-    max-width: 500px;
+    min-width: 450px;
+    max-width: 450px;
   }
   
   .title {
     text-align: center;
-    font-size: 250%;
+    font-size: 225%;
     padding: 30px;
   }
   
