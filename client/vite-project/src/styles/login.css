@@ -5,16 +5,13 @@ body {
   }
   
   .container {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
   }
   
-  h1 {
+  .title {
     text-align: center;
+    font-size: 250%;
+    padding: 30px;
   }
   
   form {
@@ -29,11 +26,6 @@ body {
     border-radius: 5px;
   }
   
-  button {
+  .login-register {
     padding: 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
   }
