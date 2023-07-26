@@ -11,10 +11,9 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Replace 'YOUR_LOGIN_API_URL' with the actual login API endpoint
-      // const response = await axios.post('YOUR_LOGIN_API_URL', { email, password });
-      // console.log('Logged in successfully!', response.data);
-      // history.push('/dashboard');
+
+      const response = await axios.post('http://localhost:3000/api/login', { username, password });
+      console.log('Logged in successfully!', response.data);
     } catch (error) {
       console.error('Login failed:', error.message);
     }
