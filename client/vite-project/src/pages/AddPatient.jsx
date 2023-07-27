@@ -1,8 +1,14 @@
 import React from 'react';
+import PatientForm from "../components/PatientForm";
+import '../styles/add.css';
 
 const AddPatients = () => {
   return (
-    <div>Add Patients</div>
+    <div className='dashboard-container'>
+        <div className='title'>Add Patient</div>
+        <PatientForm />
+    </div>
+    
   );
 };
 

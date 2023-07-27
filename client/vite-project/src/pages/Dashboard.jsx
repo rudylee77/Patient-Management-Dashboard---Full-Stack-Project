@@ -9,7 +9,7 @@ const Dashboard = () => {
       <div className='title'>Welcome to the Patient Management Dashboard</div>
       <Link to="/filter" className="filter-add-button">Filter</Link>
       <Link to="/add" className="filter-add-button">Add Patient</Link>
-        <PatientDatabase />
+      <PatientDatabase />
     </div>
   );
 };
