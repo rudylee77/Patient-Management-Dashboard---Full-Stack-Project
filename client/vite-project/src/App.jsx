@@ -3,6 +3,8 @@ import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import Login from './pages/LoginPage';
 import Dashboard from './pages/Dashboard';
 import Register from './pages/RegisterPage';
+import Filter from './pages/Filter';
+import AddPatient from './pages/AddPatient';
 import './App.css'
 
 function App() {
@@ -12,6 +14,8 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/filter" element={<Filter />} />
+          <Route path="/add" element={<AddPatient />} />
         </Routes>
     </Router>
     )

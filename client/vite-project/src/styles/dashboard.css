@@ -4,30 +4,39 @@ body {
     padding: 0;
   }
   
-  .container {
-    min-width: 450px;
-    max-width: 450px;
+  .dashboard-container {
+    margin: auto;
   }
   
   .title {
     text-align: center;
-    font-size: 250%;
     padding: 30px;
   }
   
-  form {
-    display: flex;
-    flex-direction: column;
+  .database {
+    margin-top: 20px;
+    border-collapse: collapse;
+    width: 100%;
   }
   
-  input {
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+  .database td, .database th {
+    border: 2px solid black;
+    padding: 8px;
   }
   
-  .login-register-button {
+  .database tr:nth-child(even){background-color: #fdf0da;}
+  
+  .database tr:hover {background-color: #ddd;}
+  
+  .database th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #ed762e;
+    color: white;
+  }
+
+  .filter-add-button {
     text-decoration: none;
     border-radius: 8px;
     border: 1px solid transparent;
@@ -36,6 +45,6 @@ body {
     font-weight: 500;
     font-family: inherit;
     background-color: #ed762e;
-    color: black;
-    margin-top: 10px;
+    color: white;
+    margin: 20px;
   }
