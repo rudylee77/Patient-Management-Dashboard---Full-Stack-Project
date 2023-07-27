@@ -1,16 +1,14 @@
-.dashboard-container {
-    margin: auto;
-  }
-  
-  .title {
+.title {
     text-align: center;
     padding: 30px;
   }
   
   .form-container {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
     flex-wrap: wrap;
-    gap: 10px;
+    justify-content: center;
   }
   
   .labels {
@@ -19,21 +17,56 @@
     margin-bottom: 8px;
     border-radius: 8px;
     border: 1px solid transparent;
-    padding: 0.6em 1.2em;
+    padding: 0.5em 1.5em;
     font-size: 1.2em;
     font-weight: 500;
     font-family: inherit;
-    min-width: 200px;
     text-align: left;
   }
   
   .fields {
     flex: 2;
-    padding: 10px;
+    padding: 5px;
+    margin-left: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 1em;
     font-family: inherit;
-    width: 50%;
+    width: 60%;
     text-align: left;
-}
+  }
+
+  .fields-address {
+    flex: 2;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    font-family: inherit;
+    width: 60%;
+    text-align: left;
+  }
+  
+  .fields-config {
+    padding: 5px;
+    margin-left: 8px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+    font-family: inherit;
+    width: 45%;
+    text-align: left;
+  }
+
+  .config-buttons {
+    text-decoration: none;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    background-color: #ed762e;
+    color: white;
+    margin-bottom: 8px;
+    cursor: pointer;
+  }

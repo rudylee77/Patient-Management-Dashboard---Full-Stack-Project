@@ -3,7 +3,7 @@ import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import Login from './pages/LoginPage';
 import Dashboard from './pages/Dashboard';
 import Register from './pages/RegisterPage';
-import Filter from './pages/Filter';
+import Filter from './pages/FilterPatients';
 import AddPatient from './pages/AddPatient';
 import './App.css'
 
