@@ -15,9 +15,7 @@ const PatientForm = () => {
         },
       });
 
-    const [configFormFields, setconfigFormFields] = useState([
-      { Label: '', Value: '' },
-    ]);
+    const [configFormFields, setconfigFormFields] = useState([]);
 
     const handleFieldChange = (e) => {
         const { name, value } = e.target;
@@ -46,10 +44,50 @@ const PatientForm = () => {
     }
   
     const submit = (e) => {
-      e.preventDefault();
-      console.log(configFormFields)
-    }
-  
+        e.preventDefault();
+    
+        // Prepare the patient data to be sent to the server
+        const newPatientData = {
+          firstName: formData.firstName,
+          middleName: formData.middleName,
+          lastName: formData.lastName,
+          dateOfBirth: formData.dateOfBirth,
+          address: {
+            street: formData.address.street,
+            city: formData.address.city,
+            state: formData.address.state,
+            zipCode: formData.address.zipCode,
+          },
+        };
+        fetch('http://localhost:4000/patients', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newPatientData),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log('New patient added:', data);
+            setFormData({
+              firstName: '',
+              middleName: '',
+              lastName: '',
+              dateOfBirth: '',
+              status: 'Inquiry',
+              address: {
+                street: '',
+                city: '',
+                state: '',
+                zipCode: '',
+              },
+            });
+          })
+          .catch((error) => {
+            console.error('Error adding patient:', error);
+          });
+      };
+    
     const addFields = () => {
       let object = {
         Label: '',
@@ -118,7 +156,7 @@ const PatientForm = () => {
         </select>
       </label>
       <label className='labels'>
-        Home Address
+        Address
         <div>
           <input className='fields-address'
             type="text"
@@ -153,17 +191,17 @@ const PatientForm = () => {
           {configFormFields.map((form, index) => {
             return (
               <div key={index}>
-                <label className='labels'>
-                    New Label
+                <label className='labels-config'>
                 <input className='fields-config'
                   name='label'
+                  placeholder='New Field Name'
                   onChange={event => handleFormChange(event, index)}
                   value={form.label}
                 /></label>
-                <label className='labels'>
-                    Value
-                    <input className='fields-config'
+                <label className='labels-config'>
+                    <input className='fields'
                   name='value'
+                  placeholder='Value'
                   onChange={event => handleFormChange(event, index)}
                   value={form.value}
                 /></label>

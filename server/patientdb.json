@@ -1,0 +1,32 @@
+{
+  "patients": [
+    {
+      "id": 1,
+      "firstName": "John",
+      "middleName": "",
+      "lastName": "Doe",
+      "dateOfBirth": "04/01/1988",
+      "status": "Inquiry",
+      "address": {
+        "street": "3619 Highland View Drive",
+        "city": "Roseville",
+        "state": "CA",
+        "zipCode": "95661"
+      }
+    },
+    {
+      "id": 2,
+      "firstName": "Jane",
+      "middleName": "",
+      "lastName": "Smith",
+      "dateOfBirth": "12/01/2000",
+      "status": "Inquiry",
+      "address": {
+        "street": "3479 Tennessee Avenue",
+        "city": "Pontiac",
+        "state": "MI",
+        "zipCode": "48342"
+      }
+    }
+  ]
+}

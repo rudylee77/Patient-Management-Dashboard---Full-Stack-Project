@@ -23,6 +23,18 @@
     font-family: inherit;
     text-align: left;
   }
+
+  .labels-config {
+    flex: 1;
+    display: block;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding-top: 0.5em;
+    font-size: 1.2em;
+    font-weight: 500;
+    font-family: inherit;
+    text-align: left;
+  }
   
   .fields {
     flex: 2;
@@ -32,7 +44,7 @@
     border-radius: 5px;
     font-size: 1em;
     font-family: inherit;
-    width: 60%;
+    width: 70%;
     text-align: left;
   }
 
@@ -43,7 +55,7 @@
     border-radius: 5px;
     font-size: 1em;
     font-family: inherit;
-    width: 60%;
+    width: 100%;
     text-align: left;
   }
   
@@ -55,6 +67,11 @@
     font-family: inherit;
     width: 45%;
     text-align: left;
+  }
+
+  .fields-config::placeholder {
+    color: #ed762e;
+    font-weight: bolder;
   }
 
   .config-buttons {
