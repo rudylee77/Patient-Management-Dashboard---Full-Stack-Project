@@ -1,0 +1,41 @@
+body {
+    font-family: "Andale Mono";
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container {
+    min-width: 450px;
+    max-width: 450px;
+  }
+  
+  .title {
+    text-align: center;
+    font-size: 250%;
+    padding: 30px;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  input {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .login-register-button {
+    text-decoration: none;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    background-color: #ed762e;
+    color: black;
+    margin-top: 10px;
+  }

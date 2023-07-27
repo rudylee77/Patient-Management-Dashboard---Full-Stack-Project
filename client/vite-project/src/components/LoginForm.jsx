@@ -1,19 +1,19 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import '../styles/login.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigateTo = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-
       const response = await axios.post('http://localhost:3000/api/login', { username, password });
       console.log('Logged in successfully!', response.data);
+      navigateTo('/dashboard');
     } catch (error) {
       console.error('Login failed:', error.message);
     }
