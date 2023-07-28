@@ -10,10 +10,27 @@ server.use(jsonServer.bodyParser);
 
 server.use((req, res, next) => {
   if (req.method === 'POST') {
-    req.body.id = Date.now();
+    // Extract the new field data from the request body
+    const newFields = req.body.additionalFields;
+
+    // Loop through all patients and update their additionalFields with the new fields
+    const patients = router.db.get('patients').value();
+    patients.forEach((patient) => {
+      if (!patient.additionalFields) {
+        patient.additionalFields = [];
+      }
+
+      // Loop through each new field and add it to the patient's additionalFields
+      newFields.forEach((field) => {
+        patient.additionalFields.push({ label: field.label, value: '' });
+      });
+    });
+
+    // Continue to JSON Server router
+    next();
+  } else {
+    next();
   }
-  // Continue to JSON Server router
-  next();
 });
 
 server.use(router);

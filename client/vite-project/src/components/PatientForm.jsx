@@ -52,12 +52,14 @@ const PatientForm = () => {
           middleName: formData.middleName,
           lastName: formData.lastName,
           dateOfBirth: formData.dateOfBirth,
+          status: formData.status,
           address: {
             street: formData.address.street,
             city: formData.address.city,
             state: formData.address.state,
             zipCode: formData.address.zipCode,
           },
+          additionalFields: configFormFields,
         };
         fetch('http://localhost:4000/patients', {
           method: 'POST',
@@ -90,8 +92,8 @@ const PatientForm = () => {
     
     const addFields = () => {
       let object = {
-        Label: '',
-        Value: ''
+        label: '',
+        value: ''
       }
   
       setconfigFormFields([...configFormFields, object])
