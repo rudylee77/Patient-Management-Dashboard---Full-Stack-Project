@@ -1,12 +1,12 @@
 import React from 'react';
-import Filter from "../components/Filter";
+import PatientDatabase from "../components/PatientDatabase";
 import '../styles/add.css';
 
 const AddPatients = () => {
   return (
     <div className='dashboard-container'>
         <div className='title'>Filter</div>
-        <Filter />
+        <PatientDatabase />
     </div>
     
   );
