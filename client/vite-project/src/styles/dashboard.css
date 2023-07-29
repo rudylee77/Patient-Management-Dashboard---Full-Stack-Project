@@ -27,7 +27,10 @@ body {
   
   .database tr:nth-child(even){background-color: #fdf0da;}
   
-  .database tr:hover {background-color: #ddd;}
+  .database tr:hover {
+    background-color: #ddd;
+    cursor: pointer;
+  }
   
   .database th {
     padding-top: 12px;
@@ -35,6 +38,8 @@ body {
     text-align: left;
     background-color: #ed762e;
     color: white;
+    cursor: default;
+
   }
 
   .filter-add-button {
