@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 
 const PatientForm = ({ patientData }) => {
   const [formData, setFormData] = useState({
@@ -14,6 +16,8 @@ const PatientForm = ({ patientData }) => {
       zipCode: '',
     },
   });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (patientData) {
@@ -91,14 +95,14 @@ const PatientForm = ({ patientData }) => {
           },
           body: JSON.stringify(newPatientData),
         })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log('Patient updated:', data);
-            // Optionally, you can show a success message or perform other actions upon successful update.
-          })
-          .catch((error) => {
-            console.error('Error updating patient:', error);
-          });
+        .then((response) => response.json())
+        .then((data) => {
+          console.log('Patient updated:', data);
+          navigate('/dashboard'); // Navigate to the Dashboard after successful update
+        })
+        .catch((error) => {
+          console.error('Error updating patient:', error);
+        });
       } else {
         // If patientData doesn't have an ID, it means we are creating a new patient
         // Use POST request for creating
@@ -125,6 +129,7 @@ const PatientForm = ({ patientData }) => {
               },
             });
             setconfigFormFields([]);
+            navigate('/dashboard');
           })
           .catch((error) => {
             console.error('Error adding patient:', error);

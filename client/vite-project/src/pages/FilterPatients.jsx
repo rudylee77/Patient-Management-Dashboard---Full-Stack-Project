@@ -72,7 +72,6 @@ const FilterPatients = () => {
             value={filter.selectedField}
             onChange={(e) => handleChangeFilterField(index, e.target.value)}
           >
-            <option value=''>Select a field</option>
             {fieldOptions.map((field) => (
               <option key={field} value={field}>
                 {fieldLabels[field] || field}
