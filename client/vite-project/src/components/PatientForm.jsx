@@ -61,23 +61,45 @@ const PatientForm = ({ patientData }) => {
     }
   
     const submit = (e) => {
-        e.preventDefault();
+      e.preventDefault();
     
-        // Prepare the patient data to be sent to the server
-        const newPatientData = {
-          firstName: formData.firstName,
-          middleName: formData.middleName,
-          lastName: formData.lastName,
-          dateOfBirth: formData.dateOfBirth,
-          status: formData.status,
-          address: {
-            street: formData.address.street,
-            city: formData.address.city,
-            state: formData.address.state,
-            zipCode: formData.address.zipCode,
+      // Prepare the patient data to be sent to the server
+      const newPatientData = {
+        firstName: formData.firstName,
+        middleName: formData.middleName,
+        lastName: formData.lastName,
+        dateOfBirth: formData.dateOfBirth,
+        status: formData.status,
+        address: {
+          street: formData.address.street,
+          city: formData.address.city,
+          state: formData.address.state,
+          zipCode: formData.address.zipCode,
+        },
+        additionalFields: configFormFields,
+      };
+    
+      if (patientData.id) {
+        // If patientData has an ID, it means we are editing an existing patient
+        // Use PUT or PATCH request for updating
+        fetch(`http://localhost:4000/patients/${patientData.id}`, {
+          method: 'PUT', // Use 'PUT' or 'PATCH' method for updating
+          headers: {
+            'Content-Type': 'application/json',
           },
-          additionalFields: configFormFields,
-        };
+          body: JSON.stringify(newPatientData),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log('Patient updated:', data);
+            // Optionally, you can show a success message or perform other actions upon successful update.
+          })
+          .catch((error) => {
+            console.error('Error updating patient:', error);
+          });
+      } else {
+        // If patientData doesn't have an ID, it means we are creating a new patient
+        // Use POST request for creating
         fetch('http://localhost:4000/patients', {
           method: 'POST',
           headers: {
@@ -87,7 +109,6 @@ const PatientForm = ({ patientData }) => {
         })
           .then((response) => response.json())
           .then((data) => {
-            console.log('New patient added:', data);
             setFormData({
               firstName: '',
               middleName: '',
@@ -101,11 +122,13 @@ const PatientForm = ({ patientData }) => {
                 zipCode: '',
               },
             });
+            setconfigFormFields([]);
           })
           .catch((error) => {
             console.error('Error adding patient:', error);
           });
-      };
+      }
+    };
     
     const addFields = () => {
       let object = {
