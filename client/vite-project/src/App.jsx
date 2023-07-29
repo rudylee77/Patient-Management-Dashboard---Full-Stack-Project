@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 import Register from './pages/RegisterPage';
 import Filter from './pages/FilterPatients';
 import AddPatient from './pages/AddPatient';
+import EditPatient from './pages/EditPatient';
 import './App.css'
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/filter" element={<Filter />} />
           <Route path="/add" element={<AddPatient />} />
+          <Route path="/edit" element={<EditPatient />} />
         </Routes>
     </Router>
     )

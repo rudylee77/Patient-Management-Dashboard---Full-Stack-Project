@@ -1,19 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const PatientForm = () => {
-    const [formData, setFormData] = useState({
-        firstName: '',
-        middleName: '',
-        lastName: '',
-        dateOfBirth: '',
-        status: 'Inquiry',
-        address: {
-          street: '',
-          city: '',
-          state: '',
-          zipCode: '',
-        },
-      });
+const PatientForm = ({ patientData }) => {
+  const [formData, setFormData] = useState({
+    firstName: patientData.firstName || '',
+    middleName: patientData.middleName || '',
+    lastName: patientData.lastName || '',
+    dateOfBirth: patientData.dateOfBirth || '',
+    status: patientData.status || 'Inquiry',
+    address: {
+      street: patientData.address?.street || '',
+      city: patientData.address?.city || '',
+      state: patientData.address?.state || '',
+      zipCode: patientData.address?.zipCode || '',
+    },
+  });
+
+  useEffect(() => {
+    setFormData({
+      firstName: patientData.firstName || '',
+      middleName: patientData.middleName || '',
+      lastName: patientData.lastName || '',
+      dateOfBirth: patientData.dateOfBirth || '',
+      status: patientData.status || 'Inquiry',
+      address: {
+        street: patientData.address?.street || '',
+        city: patientData.address?.city || '',
+        state: patientData.address?.state || '',
+        zipCode: patientData.address?.zipCode || '',
+      },
+    });
+  }, [patientData]);
+
 
     const [configFormFields, setconfigFormFields] = useState([]);
 

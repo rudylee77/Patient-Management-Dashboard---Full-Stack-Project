@@ -1,7 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/dashboard.css';
 
 const PatientDatabase = ({ data, filters }) => {
+  const navigate = useNavigate();
+
   // Mapping between field names and their display labels
   const fieldLabels = {
     firstName: 'First Name',
@@ -32,6 +35,11 @@ const PatientDatabase = ({ data, filters }) => {
     });
   });
 
+  // Function to handle row click and navigate to EditPatient page with patient data
+  const handleRowClick = (patient) => {
+    navigate('/edit', { state: { patientData: patient } });
+  };
+
   return (
     <div className='patient-database-container'>
       <table className='database'>
@@ -41,21 +49,34 @@ const PatientDatabase = ({ data, filters }) => {
             <th>Date of Birth</th>
             <th>Status</th>
             <th>Address</th>
-            {data.length > 0 && data[0].additionalFields && data[0].additionalFields.map((field, index) => (
-              <th key={index}>{field.label}</th>
-            ))}
+            {data.length > 0 &&
+              data[0].additionalFields &&
+              data[0].additionalFields.map((field, index) => (
+                <th key={index}>{field.label}</th>
+              ))}
           </tr>
         </thead>
         <tbody>
           {filteredPatients.map((patient) => (
-            <tr key={patient.id}>
-              <td>{patient.firstName + ' ' + patient.middleName + ' ' + patient.lastName}</td>
+            <tr key={patient.id} onClick={() => handleRowClick(patient)}>
+              <td>
+                {patient.firstName + ' ' + patient.middleName + ' ' + patient.lastName}
+              </td>
               <td>{patient.dateOfBirth}</td>
               <td>{patient.status}</td>
-              <td>{patient.address.street + ' ' + patient.address.city + ', ' + patient.address.state + ' ' + patient.address.zipCode}</td>
-              {patient.additionalFields && patient.additionalFields.map((field, index) => (
-                <td key={index}>{field.value}</td>
-              ))}
+              <td>
+                {patient.address.street +
+                  ' ' +
+                  patient.address.city +
+                  ', ' +
+                  patient.address.state +
+                  ' ' +
+                  patient.address.zipCode}
+              </td>
+              {patient.additionalFields &&
+                patient.additionalFields.map((field, index) => (
+                  <td key={index}>{field.value}</td>
+                ))}
             </tr>
           ))}
         </tbody>
