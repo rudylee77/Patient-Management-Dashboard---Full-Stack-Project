@@ -1,31 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import '../styles/dashboard.css';
 
-const PatientDatabase = ({ selectedField, filterValue }) => {
-  const [patients, setPatients] = useState([]);
+const PatientDatabase = ({ data, filters }) => {
+  // Mapping between field names and their display labels
+  const fieldLabels = {
+    firstName: 'First Name',
+    middleName: 'Middle Name',
+    lastName: 'Last Name',
+    dateOfBirth: 'Date of Birth',
+    status: 'Status',
+    address: 'Address',
+    // Add more fields if needed
+  };
 
-  useEffect(() => {
-    // Fetch the list of patients from the JSON server
-    fetch('http://localhost:4000/patients')
-      .then((response) => response.json())
-      .then((data) => {
-        setPatients(data);
-      })
-      .catch((error) => {
-        console.error('Error fetching patients:', error);
-      });
-  }, []);
-
-  // Filter the patients based on the selected field and filter value
-  const filteredPatients = patients.filter((patient) => {
-    const fieldValue = patient[selectedField];
-    if (typeof fieldValue === 'string') {
-      // Case-insensitive string matching for strings
-      return fieldValue.toLowerCase().includes(filterValue.toLowerCase());
-    } else {
-      // Direct comparison for non-string fields
-      return fieldValue === filterValue;
-    }
+  // Filter the patients based on the selected filters
+  const filteredPatients = data.filter((patient) => {
+    return filters.every((filter) => {
+      const { selectedField, filterValue } = filter;
+      if (selectedField && filterValue) {
+        const fieldValue = patient[selectedField];
+        if (typeof fieldValue === 'string') {
+          return fieldValue.toLowerCase().includes(filterValue.toLowerCase());
+        } else if (Array.isArray(fieldValue)) {
+          return fieldValue.includes(filterValue);
+        } else {
+          return false;
+        }
+      } else {
+        return true;
+      }
+    });
   });
 
   return (
@@ -37,7 +41,7 @@ const PatientDatabase = ({ selectedField, filterValue }) => {
             <th>Date of Birth</th>
             <th>Status</th>
             <th>Address</th>
-            {patients.length > 0 && patients[0].additionalFields && patients[0].additionalFields.map((field, index) => (
+            {data.length > 0 && data[0].additionalFields && data[0].additionalFields.map((field, index) => (
               <th key={index}>{field.label}</th>
             ))}
           </tr>

@@ -3,9 +3,7 @@
     padding: 30px;
   }
 
-  #root {
-    min-width: 1000px;
-  }
+
   
   .dashboard-container {
     margin: auto;
@@ -19,7 +17,7 @@
    .database {
     margin-top: 20px;
     border-collapse: collapse;
-    width: 100%;
+    min-width: 1200px;
   }
   
   .database td, .database th {

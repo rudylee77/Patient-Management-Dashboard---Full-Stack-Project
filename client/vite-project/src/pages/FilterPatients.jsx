@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import PatientDatabase from "../components/PatientDatabase";
+import PatientDatabase from '../components/PatientDatabase';
 import '../styles/filter.css';
 
 const FilterPatients = () => {
   const [filters, setFilters] = useState([{ selectedField: '', filterValue: '' }]);
   const [fieldOptions, setFieldOptions] = useState([]);
+  const [initialData, setInitialData] = useState([]);
 
   useEffect(() => {
     // Fetch the list of patients from the JSON server
     fetch('http://localhost:4000/patients')
       .then((response) => response.json())
       .then((data) => {
-        // Extract the available field options from the patient data
         const allFields = data.reduce((fields, patient) => {
           return Object.keys(patient).reduce((patientFields, key) => {
             if (key !== 'id' && !fields.includes(key)) {
@@ -21,6 +21,7 @@ const FilterPatients = () => {
           }, fields);
         }, []);
         setFieldOptions(allFields);
+        setInitialData(data);
       })
       .catch((error) => {
         console.error('Error fetching patients:', error);
@@ -62,34 +63,41 @@ const FilterPatients = () => {
 
   return (
     <div className='dashboard-container'>
-  <div className='title'>Filter</div>
-  {filters.map((filter, index) => (
-    <div key={index} className='form-group'>
-      <label htmlFor={`fields-${index}`}>Select a field:</label>
-      <select
-        id={`fields-${index}`}
-        value={filter.selectedField}
-        onChange={(e) => handleChangeFilterField(index, e.target.value)}
-      >
-        <option className value=''>Select a field</option>
-        {fieldOptions.map((field, index) => (
-          <option key={index} value={field}>{fieldLabels[field]}</option>
-        ))}
-      </select>
-      <label className='label' htmlFor={`filterValue-${index}`}>Enter a value:</label>
-      <input
-        type='text'
-        id={`filterValue-${index}`}
-        value={filter.filterValue}
-        onChange={(e) => handleChangeFilterValue(index, e.target.value)}
-      />
-      <button className='button' onClick={() => handleRemoveFilter(index)}>Remove</button>
+      <div className='title'>Filter</div>
+      {filters.map((filter, index) => (
+        <div key={`${filter.selectedField}-${index}`} className='form-group'>
+          <label htmlFor={`fields-${index}`}>Select a field:</label>
+          <select
+            id={`fields-${index}`}
+            value={filter.selectedField}
+            onChange={(e) => handleChangeFilterField(index, e.target.value)}
+          >
+            <option value=''>Select a field</option>
+            {fieldOptions.map((field) => (
+              <option key={field} value={field}>
+                {fieldLabels[field] || field}
+              </option>
+            ))}
+          </select>
+          <label className='label' htmlFor={`filterValue-${index}`}>
+            Enter a value:
+          </label>
+          <input
+            type='text'
+            id={`filterValue-${index}`}
+            value={filter.filterValue}
+            onChange={(e) => handleChangeFilterValue(index, e.target.value)}
+          />
+          <button className='button' onClick={() => handleRemoveFilter(index)}>
+            Remove
+          </button>
+        </div>
+      ))}
+      <button className='button' onClick={handleAddFilter}>
+        Add Filter
+      </button>
+      <PatientDatabase data={initialData} filters={filters} />
     </div>
-  ))}
-  <button className='button' onClick={handleAddFilter}>Add Filter</button>
-  <PatientDatabase filters={filters} />
-</div>
-
   );
 };
 

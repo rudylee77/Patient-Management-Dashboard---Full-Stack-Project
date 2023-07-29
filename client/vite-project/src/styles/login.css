@@ -5,6 +5,7 @@ body {
   display: flex;
 }
 
+
 .container {
   min-width: 450px;
   max-width: 450px;
