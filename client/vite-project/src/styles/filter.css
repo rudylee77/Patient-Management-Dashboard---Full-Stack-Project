@@ -1,7 +1,6 @@
-body {
-    font-family: "Andale Mono";
-    margin: 0;
-    padding: 0;
+.title {
+    text-align: center;
+    padding: 30px;
   }
 
   #root {
@@ -10,14 +9,14 @@ body {
   
   .dashboard-container {
     margin: auto;
+
   }
-  
-  .title {
-    text-align: center;
-    padding: 30px;
+
+  .label {
+    padding-left: 20px;
   }
-  
-  .database {
+
+   .database {
     margin-top: 20px;
     border-collapse: collapse;
     width: 100%;
@@ -40,7 +39,7 @@ body {
     color: white;
   }
 
-  .filter-add-button {
+  .button {
     text-decoration: none;
     border-radius: 8px;
     border: 1px solid transparent;

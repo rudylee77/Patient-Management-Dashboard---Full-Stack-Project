@@ -12,13 +12,7 @@
         "city": "Roseville",
         "state": "CA",
         "zipCode": "95661"
-      },
-      "additionalFields": [
-        {
-          "label": "College",
-          "value": ""
-        }
-      ]
+      }
     },
     {
       "id": 2,
@@ -32,33 +26,7 @@
         "city": "Pontiac",
         "state": "MI",
         "zipCode": "48342"
-      },
-      "additionalFields": [
-        {
-          "label": "College",
-          "value": ""
-        }
-      ]
-    },
-    {
-      "firstName": "Rudy",
-      "middleName": "K",
-      "lastName": "Lee",
-      "dateOfBirth": "2001-09-27",
-      "status": "Inquiry",
-      "address": {
-        "street": "2117 Haste St",
-        "city": "Berkeley",
-        "state": "CA",
-        "zipCode": "94704"
-      },
-      "additionalFields": [
-        {
-          "label": "College",
-          "value": "UC Berkeley"
-        }
-      ],
-      "id": 3
+      }
     }
   ]
 }

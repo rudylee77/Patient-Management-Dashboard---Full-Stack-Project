@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/dashboard.css';
 
-const PatientDatabase = () => {
+const PatientDatabase = ({ selectedField, filterValue }) => {
   const [patients, setPatients] = useState([]);
 
   useEffect(() => {
@@ -15,6 +15,18 @@ const PatientDatabase = () => {
         console.error('Error fetching patients:', error);
       });
   }, []);
+
+  // Filter the patients based on the selected field and filter value
+  const filteredPatients = patients.filter((patient) => {
+    const fieldValue = patient[selectedField];
+    if (typeof fieldValue === 'string') {
+      // Case-insensitive string matching for strings
+      return fieldValue.toLowerCase().includes(filterValue.toLowerCase());
+    } else {
+      // Direct comparison for non-string fields
+      return fieldValue === filterValue;
+    }
+  });
 
   return (
     <div className='patient-database-container'>
@@ -31,7 +43,7 @@ const PatientDatabase = () => {
           </tr>
         </thead>
         <tbody>
-          {patients.map((patient) => (
+          {filteredPatients.map((patient) => (
             <tr key={patient.id}>
               <td>{patient.firstName + ' ' + patient.middleName + ' ' + patient.lastName}</td>
               <td>{patient.dateOfBirth}</td>
