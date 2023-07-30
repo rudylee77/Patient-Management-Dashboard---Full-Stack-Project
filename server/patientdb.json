@@ -12,7 +12,12 @@
         "state": "CA",
         "zipCode": "95661"
       },
-      "additionalFields": [],
+      "additionalFields": [
+        {
+          "label": "College",
+          "value": ""
+        }
+      ],
       "id": 1
     },
     {
@@ -27,8 +32,33 @@
         "state": "MI",
         "zipCode": "48342"
       },
-      "additionalFields": [],
+      "additionalFields": [
+        {
+          "label": "College",
+          "value": ""
+        }
+      ],
       "id": 2
+    },
+    {
+      "firstName": "Rudy",
+      "middleName": "Kyung Jae",
+      "lastName": "Lee",
+      "dateOfBirth": "2001-09-27",
+      "status": "Active",
+      "address": {
+        "street": "2117 Haste St, APT 201",
+        "city": "Berkeley",
+        "state": "CA",
+        "zipCode": "94704"
+      },
+      "additionalFields": [
+        {
+          "label": "College",
+          "value": "UC Berkeley"
+        }
+      ],
+      "id": 3
     }
   ]
 }

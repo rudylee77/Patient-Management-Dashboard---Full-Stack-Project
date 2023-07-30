@@ -20,7 +20,7 @@ const PatientForm = ({ patientData }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (patientData) {
+    if (patientData && patientData.id) {
       setFormData({
         firstName: patientData.firstName || '',
         middleName: patientData.middleName || '',
@@ -85,7 +85,7 @@ const PatientForm = ({ patientData }) => {
         additionalFields: configFormFields,
       };
     
-      if (patientData.id) {
+      if (patientData && patientData.id) {
         // If patientData has an ID, it means we are editing an existing patient
         // Use PUT or PATCH request for updating
         fetch(`http://localhost:4000/patients/${patientData.id}`, {
@@ -95,14 +95,14 @@ const PatientForm = ({ patientData }) => {
           },
           body: JSON.stringify(newPatientData),
         })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log('Patient updated:', data);
-          navigate('/dashboard'); // Navigate to the Dashboard after successful update
-        })
-        .catch((error) => {
-          console.error('Error updating patient:', error);
-        });
+          .then((response) => response.json())
+          .then((data) => {
+            console.log('Patient updated:', data);
+            navigate('/dashboard'); // Navigate to the Dashboard after successful update
+          })
+          .catch((error) => {
+            console.error('Error updating patient:', error);
+          });
       } else {
         // If patientData doesn't have an ID, it means we are creating a new patient
         // Use POST request for creating
