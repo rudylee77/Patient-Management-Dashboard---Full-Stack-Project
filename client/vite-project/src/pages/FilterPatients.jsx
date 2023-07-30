@@ -12,6 +12,7 @@ const FilterPatients = () => {
     fetch('http://localhost:4000/patients')
       .then((response) => response.json())
       .then((data) => {
+        // Extract the available field options from the patient data
         const allFields = data.reduce((fields, patient) => {
           return Object.keys(patient).reduce((patientFields, key) => {
             if (key !== 'id' && !fields.includes(key)) {
@@ -72,6 +73,7 @@ const FilterPatients = () => {
             value={filter.selectedField}
             onChange={(e) => handleChangeFilterField(index, e.target.value)}
           >
+            <option value=''>Select a field</option>
             {fieldOptions.map((field) => (
               <option key={field} value={field}>
                 {fieldLabels[field] || field}

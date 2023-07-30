@@ -21,7 +21,14 @@ const PatientDatabase = ({ data, filters }) => {
       const { selectedField, filterValue } = filter;
       if (selectedField && filterValue) {
         const fieldValue = patient[selectedField];
-        if (typeof fieldValue === 'string') {
+        if (selectedField === 'firstName') {
+          // For firstName, perform case-insensitive filtering on the firstName property only
+          return fieldValue.toLowerCase().includes(filterValue.toLowerCase());
+        } else if (selectedField === 'address') {
+          // For address, perform case-insensitive filtering on the full address string
+          const addressString = `${patient.address.street} ${patient.address.city} ${patient.address.state} ${patient.address.zipCode}`;
+          return addressString.toLowerCase().includes(filterValue.toLowerCase());
+        } else if (typeof fieldValue === 'string') {
           return fieldValue.toLowerCase().includes(filterValue.toLowerCase());
         } else if (Array.isArray(fieldValue)) {
           return fieldValue.includes(filterValue);
@@ -33,7 +40,7 @@ const PatientDatabase = ({ data, filters }) => {
       }
     });
   });
-
+  
   // Function to handle row click and navigate to EditPatient page with patient data
   const handleRowClick = (patient) => {
     navigate('/edit', { state: { patientData: patient } });
@@ -72,13 +79,22 @@ const PatientDatabase = ({ data, filters }) => {
     return sortConfig.direction === 'asc' ? a[sortConfig.key] - b[sortConfig.key] : b[sortConfig.key] - a[sortConfig.key];
   });
   
-  
+  const getFullName = (patient) => {
+    let fullName = patient.firstName;
+    if (patient.middleName) {
+      fullName += ' ' + patient.middleName;
+    }
+    if (patient.lastName) {
+      fullName += ' ' + patient.lastName;
+    }
+    return fullName;
+  };
 
   return (
     <div className='patient-database-container'>
       <table className='database'>
         <thead>
-        <tr>
+          <tr>
             <th onClick={() => handleHeaderClick('firstName')}>
               Full Name {sortConfig.key === 'firstName' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
             </th>
@@ -102,10 +118,8 @@ const PatientDatabase = ({ data, filters }) => {
         </thead>
         <tbody>
           {sortedPatients.map((patient) => (
-            <tr key={patient.id} onClick={() => handleRowClick(patient)}>
-              <td>
-                {patient.firstName + ' ' + patient.middleName + ' ' + patient.lastName}
-              </td>
+              <tr key={patient.id} onClick={() => handleRowClick(patient)}>
+              <td>{getFullName(patient)}</td>
               <td>{patient.dateOfBirth}</td>
               <td>{patient.status}</td>
               <td>
