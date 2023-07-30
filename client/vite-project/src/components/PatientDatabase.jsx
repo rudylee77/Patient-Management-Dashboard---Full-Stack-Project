@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/dashboard.css';
 
@@ -13,7 +13,6 @@ const PatientDatabase = ({ data, filters }) => {
     dateOfBirth: 'Date of Birth',
     status: 'Status',
     address: 'Address',
-    // Add more fields if needed
   };
 
   // Filter the patients based on the selected filters
@@ -40,24 +39,69 @@ const PatientDatabase = ({ data, filters }) => {
     navigate('/edit', { state: { patientData: patient } });
   };
 
+  const [sortConfig, setSortConfig] = useState({
+    key: '',
+    direction: '',
+  });
+
+  const handleHeaderClick = (key) => {
+    setSortConfig((prevSortConfig) => {
+      if (prevSortConfig.key === key) {
+        return { ...prevSortConfig, direction: prevSortConfig.direction === 'asc' ? 'desc' : 'asc' };
+      } else {
+        return { key, direction: 'asc' };
+      }
+    });
+  };
+
+  const sortedPatients = [...filteredPatients].sort((a, b) => {
+    if (sortConfig.key === 'address') {
+      const aValue = a.address.street; // Sort by address.street
+      const bValue = b.address.street;
+  
+      // Compare the address strings directly
+      return sortConfig.direction === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+    } else if (sortConfig.key === 'dateOfBirth') {
+      const aDate = new Date(a[sortConfig.key]);
+      const bDate = new Date(b[sortConfig.key]);
+      return sortConfig.direction === 'asc' ? aDate - bDate : bDate - aDate;
+    } else if (typeof a[sortConfig.key] === 'string' && typeof b[sortConfig.key] === 'string') {
+      return sortConfig.direction === 'asc' ? a[sortConfig.key].localeCompare(b[sortConfig.key]) : b[sortConfig.key].localeCompare(a[sortConfig.key]);
+    }
+  
+    return sortConfig.direction === 'asc' ? a[sortConfig.key] - b[sortConfig.key] : b[sortConfig.key] - a[sortConfig.key];
+  });
+  
+  
+
   return (
     <div className='patient-database-container'>
       <table className='database'>
         <thead>
-          <tr>
-            <th>Full Name</th>
-            <th>Date of Birth</th>
-            <th>Status</th>
-            <th>Address</th>
+        <tr>
+            <th onClick={() => handleHeaderClick('firstName')}>
+              Full Name {sortConfig.key === 'firstName' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+            </th>
+            <th onClick={() => handleHeaderClick('dateOfBirth')}>
+              Date of Birth {sortConfig.key === 'dateOfBirth' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+            </th>
+            <th onClick={() => handleHeaderClick('status')}>
+              Status {sortConfig.key === 'status' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+            </th>
+            <th onClick={() => handleHeaderClick('address')}>
+              Address {sortConfig.key === 'address' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+            </th>
             {data.length > 0 &&
               data[0].additionalFields &&
               data[0].additionalFields.map((field, index) => (
-                <th key={index}>{field.label}</th>
+                <th key={index} onClick={() => handleHeaderClick(`additionalFields[${index}].value`)}>
+                  {field.label} {sortConfig.key === `additionalFields[${index}].value` && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+                </th>
               ))}
           </tr>
         </thead>
         <tbody>
-          {filteredPatients.map((patient) => (
+          {sortedPatients.map((patient) => (
             <tr key={patient.id} onClick={() => handleRowClick(patient)}>
               <td>
                 {patient.firstName + ' ' + patient.middleName + ' ' + patient.lastName}
