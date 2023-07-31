@@ -276,29 +276,49 @@ const PatientForm = ({ patientData }) => {
               </label>
             );
           })}
+    
     {configFormFields.map((form, index) => (
-        <div key={index}>
-          <label className='labels-config'>
-            <input
-              className='fields-config'
-              name='label'
-              placeholder='New Field Name'
-              onChange={event => handleFormChange(event, index)}
-              value={form.label}
-            />
-          </label>
-          <label className='labels-config'>
-            <input
-              className='fields'
-              name='value'
-              placeholder='Value'
-              onChange={event => handleFormChange(event, index)}
-              value={form.value}
-            />
-          </label>
-          <button className='config-buttons' onClick={() => removeFields(index)}>Remove</button>
-        </div>
-    ))}
+          <div key={index}>
+            {/* Check if the label exists in patientData.additionalFields */}
+            {patientData.additionalFields &&
+            patientData.additionalFields.find(field => field.label === form.label) ? (
+              <label className='labels'>
+                {form.label}
+                <input
+                  className='fields'
+                  name={form.label}
+                  placeholder={form.label}
+                  onChange={event => handleFormChange(event, index)}
+                  value={form.value}
+                />
+              </label>
+            ) : (
+              <div>
+                <label className='labels-config'>
+                  <input
+                    className='fields-config'
+                    name='label'
+                    placeholder='New Field Name'
+                    onChange={event => handleFormChange(event, index)}
+                    value={form.label}
+                  />
+                </label>
+                <label className='labels-config'>
+                  <input
+                    className='fields'
+                    name='value'
+                    placeholder='Value'
+                    onChange={event => handleFormChange(event, index)}
+                    value={form.value}
+                  />
+                </label>
+                <button className='config-buttons' onClick={() => removeFields(index)}>
+                  Remove
+                </button>
+              </div>
+            )}
+          </div>
+        ))}
     </form>
         <button className='config-buttons' onClick={addFields}>Add Another Field</button>
         <br />

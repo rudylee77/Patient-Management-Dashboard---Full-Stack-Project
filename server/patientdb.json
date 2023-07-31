@@ -12,6 +12,12 @@
         "state": "CA",
         "zipCode": "95661"
       },
+      "additionalFields": [
+        {
+          "label": "College",
+          "value": ""
+        }
+      ],
       "id": 1
     },
     {
@@ -26,6 +32,12 @@
         "state": "MI",
         "zipCode": "48342"
       },
+      "additionalFields": [
+        {
+          "label": "College",
+          "value": ""
+        }
+      ],
       "id": 2
     },
     {
@@ -40,6 +52,12 @@
         "state": "CA",
         "zipCode": "94704"
       },
+      "additionalFields": [
+        {
+          "label": "College",
+          "value": "UC Berkeley"
+        }
+      ],
       "id": 3
     }
   ]
