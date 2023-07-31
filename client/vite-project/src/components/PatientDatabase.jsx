@@ -15,23 +15,37 @@ const PatientDatabase = ({ data, filters }) => {
     address: 'Address',
   };
 
-  // Filter the patients based on the selected filters
+  const getAdditionalFieldValueByLabel = (patient, label) => {
+    const additionalField = patient.additionalFields.find((field) => field.label === label);
+    return additionalField ? additionalField.value : '';
+  };
+
   const filteredPatients = data.filter((patient) => {
     return filters.every((filter) => {
       const { selectedField, filterValue } = filter;
       if (selectedField && filterValue) {
-        const fieldValue = patient[selectedField];
+        if (selectedField in fieldLabels) {
+          var fieldValue =  patient[selectedField];
+        } else {
+          console.log(patient['additionalFields'][0])
+          for (const i in patient['additionalFields']) {
+            console.log(typeof i);
+          }
+        }
+        
         if (selectedField === 'firstName') {
           // For firstName, perform case-insensitive filtering on the firstName property only
-          return fieldValue.toLowerCase().includes(filterValue.toLowerCase());
+          return fieldValue.toLowerCase().startsWith(filterValue.toLowerCase());
         } else if (selectedField === 'address') {
           // For address, perform case-insensitive filtering on the full address string
           const addressString = `${patient.address.street} ${patient.address.city} ${patient.address.state} ${patient.address.zipCode}`;
-          return addressString.toLowerCase().includes(filterValue.toLowerCase());
+          return addressString.toLowerCase().startsWith(filterValue.toLowerCase());
         } else if (typeof fieldValue === 'string') {
           return fieldValue.toLowerCase().includes(filterValue.toLowerCase());
         } else if (Array.isArray(fieldValue)) {
-          return fieldValue.includes(filterValue);
+          // Check for the selected field in additionalFields array and filter based on its value
+          const additionalFieldValue = getAdditionalFieldValueByLabel(patient, selectedField);
+          return additionalFieldValue.toLowerCase().includes(filterValue.toLowerCase());
         } else {
           return false;
         }
@@ -61,9 +75,14 @@ const PatientDatabase = ({ data, filters }) => {
     });
   };
 
-  const getAdditionalFieldValue = (patient, index) => {
-    if (patient.additionalFields && patient.additionalFields.length > index) {
-      return patient.additionalFields[index].value;
+  const getAdditionalFieldValue = (patient, fieldKey) => {
+    const labelRegex = /\[([0-9]+)\]\.value/;
+    const match = fieldKey.match(labelRegex);
+    if (match) {
+      const index = Number(match[1]);
+      if (patient.additionalFields && patient.additionalFields.length > index) {
+        return patient.additionalFields[index].value;
+      }
     }
     return '';
   };
@@ -102,6 +121,14 @@ const PatientDatabase = ({ data, filters }) => {
     return fullName;
   };
   
+  const uniqueAdditionalFieldLabels = new Set();
+    data.forEach((patient) => {
+      if (patient.additionalFields) {
+        patient.additionalFields.forEach((field) => {
+          uniqueAdditionalFieldLabels.add(field.label);
+        });
+      }
+  });
 
   return (
     <div className='patient-database-container'>
@@ -120,18 +147,16 @@ const PatientDatabase = ({ data, filters }) => {
             <th onClick={() => handleHeaderClick('address')}>
               Address {sortConfig.key === 'address' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
             </th>
-            {data.length > 0 &&
-              data[0].additionalFields &&
-              data[0].additionalFields.map((field, index) => (
-                <th key={index} onClick={() => handleHeaderClick(`additionalFields[${index}].value`)}>
-                  {field.label} {sortConfig.key === `additionalFields[${index}].value` && (sortConfig.direction === 'asc' ? '▲' : '▼')}
-                </th>
-              ))}
+            {Array.from(uniqueAdditionalFieldLabels).map((label, index) => (
+              <th key={index} onClick={() => handleHeaderClick(`additionalFields[${index}].value`)}>
+                {label} {sortConfig.key === `additionalFields[${index}].value` && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+              </th>
+            ))}
           </tr>
         </thead>
         <tbody>
           {sortedPatients.map((patient) => (
-              <tr key={patient.id} onClick={() => handleRowClick(patient)}>
+            <tr key={patient.id} onClick={() => handleRowClick(patient)}>
               <td>{getFullName(patient)}</td>
               <td>{patient.dateOfBirth}</td>
               <td>{patient.status}</td>
@@ -144,10 +169,9 @@ const PatientDatabase = ({ data, filters }) => {
                   ' ' +
                   patient.address.zipCode}
               </td>
-              {patient.additionalFields &&
-                patient.additionalFields.map((field, index) => (
-                  <td key={index}>{field.value}</td>
-                ))}
+              {Array.from(uniqueAdditionalFieldLabels).map((label, index) => (
+                <td key={index}>{getAdditionalFieldValueByLabel(patient, label)}</td>
+              ))}
             </tr>
           ))}
         </tbody>
@@ -157,3 +181,4 @@ const PatientDatabase = ({ data, filters }) => {
 };
 
 export default PatientDatabase;
+

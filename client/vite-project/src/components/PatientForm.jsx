@@ -35,9 +35,13 @@ const PatientForm = ({ patientData }) => {
         },
       });
 
-      setconfigFormFields(patientData.additionalFields || []);
-      const usedLabelsFromData = patientData.additionalFields.map((field) => field.label);
-      setUsedLabels(usedLabelsFromData);
+      if (patientData.additionalFields) {
+        setconfigFormFields(patientData.additionalFields);
+        const usedLabelsFromData = patientData.additionalFields.map((field) => field.label);
+        setUsedLabels(usedLabelsFromData);
+      } else {
+        setconfigFormFields([]);
+      }
     } else {
       // If there is no patientData, it means we are adding a new patient
       // Set the initial configFormFields to an empty array

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PatientDatabase from '../components/PatientDatabase';
 import '../styles/filter.css';
 
@@ -12,16 +12,21 @@ const FilterPatients = () => {
     fetch('http://localhost:4000/patients')
       .then((response) => response.json())
       .then((data) => {
-        // Extract the available field options from the patient data
-        const allFields = data.reduce((fields, patient) => {
-          return Object.keys(patient).reduce((patientFields, key) => {
-            if (key !== 'id' && !fields.includes(key)) {
-              return [...patientFields, key];
+        // Extract the available field options from the patient data, excluding 'id'
+        const allFieldsSet = new Set();
+        data.forEach((patient) => {
+          Object.keys(patient).forEach((field) => {
+            if (field !== 'id' && field !== 'additionalFields') {
+              allFieldsSet.add(field);
             }
-            return patientFields;
-          }, fields);
-        }, []);
-        setFieldOptions(allFields);
+          });
+          if (patient.additionalFields) {
+            patient.additionalFields.forEach((field) => {
+              allFieldsSet.add(field.label); // Add the labels of additionalFields
+            });
+          }
+        });
+        setFieldOptions(Array.from(allFieldsSet));
         setInitialData(data);
       })
       .catch((error) => {
@@ -74,11 +79,17 @@ const FilterPatients = () => {
             onChange={(e) => handleChangeFilterField(index, e.target.value)}
           >
             <option value=''>Select a field</option>
-            {fieldOptions.map((field) => (
-              <option key={field} value={field}>
-                {fieldLabels[field] || field}
-              </option>
-            ))}
+            {fieldOptions.map((field) => {
+              if (!field.startsWith('additionalFields[')) {
+                // Exclude the labels of additionalFields
+                return (
+                  <option key={field} value={field}>
+                    {fieldLabels[field] || field}
+                  </option>
+                );
+              }
+              return null; // Skip the labels of additionalFields
+            })}
           </select>
           <label className='label' htmlFor={`filterValue-${index}`}>
             Enter a value:
