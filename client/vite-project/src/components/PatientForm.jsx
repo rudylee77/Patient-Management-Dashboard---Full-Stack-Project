@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const PatientForm = ({ patientData }) => {
+const PatientForm = ({ patientData, initialConfigFormFields }) => {
   const [formData, setFormData] = useState({
     firstName: '',
     middleName: '',
@@ -18,9 +18,32 @@ const PatientForm = ({ patientData }) => {
 
   const navigate = useNavigate();
   const [usedLabels, setUsedLabels] = useState([]);
+  const [temporaryFields, setTemporaryFields] = useState([]);
+
+
+  const fetchPatientData = async () => {
+    try {
+      const response = await fetch('http://localhost:4000/patients');
+      const data = await response.json();
+      // Filter patients with additionalFields and get unique field labels
+      const additionalFieldsLabels = data
+        .filter((patient) => patient.additionalFields)
+        .map((patient) => patient.additionalFields.map((field) => field.label))
+        .flat()
+        .filter((label, index, self) => self.indexOf(label) === index);
+  
+      // Create initial config form fields based on the labels
+      const initialConfigFields = additionalFieldsLabels.map((label) => ({ label, value: '' }));
+  
+      setconfigFormFields(initialConfigFields);
+    } catch (error) {
+      console.error('Error fetching patient data:', error);
+    }
+  };
 
   useEffect(() => {
     if (patientData && patientData.id) {
+      // Existing patient data (edit mode)
       setFormData({
         firstName: patientData.firstName || '',
         middleName: patientData.middleName || '',
@@ -34,7 +57,7 @@ const PatientForm = ({ patientData }) => {
           zipCode: patientData.address?.zipCode || '',
         },
       });
-
+  
       if (patientData.additionalFields) {
         setconfigFormFields(patientData.additionalFields);
         const usedLabelsFromData = patientData.additionalFields.map((field) => field.label);
@@ -43,11 +66,23 @@ const PatientForm = ({ patientData }) => {
         setconfigFormFields([]);
       }
     } else {
-      // If there is no patientData, it means we are adding a new patient
-      // Set the initial configFormFields to an empty array
-      setconfigFormFields([]);
+      setFormData({
+        firstName: '',
+        middleName: '',
+        lastName: '',
+        dateOfBirth: '',
+        status: 'Inquiry',
+        address: {
+          street: '',
+          city: '',
+          state: '',
+          zipCode: '',
+        },
+      });
+  
+      fetchPatientData();
     }
-  }, [patientData]);
+  }, [patientData]); 
 
   const [configFormFields, setconfigFormFields] = useState([]);
 
@@ -71,10 +106,31 @@ const PatientForm = ({ patientData }) => {
   };
 
   const handleFormChange = (event, index) => {
-    let data = [...configFormFields];
-    data[index][event.target.name] = event.target.value;
-    setconfigFormFields(data);
+    const { name, value } = event.target;
+    if (name === 'label') {
+      // Handle changes to the label field separately
+      setTemporaryFields((prevFields) => {
+        const updatedFields = [...prevFields];
+        updatedFields[index] = {
+          ...updatedFields[index],
+          label: value, // Update the label field at the given index
+        };
+        return updatedFields;
+      });
+    } else {
+      // Handle changes to the value field separately
+      setTemporaryFields((prevFields) => {
+        const updatedFields = [...prevFields];
+        updatedFields[index] = {
+          ...updatedFields[index],
+          value: value, // Update the value field at the given index
+        };
+        return updatedFields;
+      });
+    }
   };
+  
+  
   
   const submit = (e) => {
     e.preventDefault();
@@ -277,56 +333,55 @@ const PatientForm = ({ patientData }) => {
             );
           })}
     
-    {configFormFields.map((form, index) => (
-          <div key={index}>
-            {/* Check if the label exists in patientData.additionalFields */}
-            {patientData.additionalFields &&
-            patientData.additionalFields.find(field => field.label === form.label) ? (
-              <label className='labels'>
-                {form.label}
-                <input
-                  className='fields'
-                  name={form.label}
-                  placeholder={form.label}
-                  onChange={event => handleFormChange(event, index)}
-                  value={form.value}
-                />
-              </label>
-            ) : (
-              <div>
-                <label className='labels-config'>
-                  <input
-                    className='fields-config'
-                    name='label'
-                    placeholder='New Field Name'
-                    onChange={event => handleFormChange(event, index)}
-                    value={form.label}
-                  />
-                </label>
-                <label className='labels-config'>
-                  <input
-                    className='fields'
-                    name='value'
-                    placeholder='Value'
-                    onChange={event => handleFormChange(event, index)}
-                    value={form.value}
-                  />
-                </label>
-                <button className='config-buttons' onClick={() => removeFields(index)}>
-                  Remove
-                </button>
+            {configFormFields.map((form, index) => (
+              <div key={index}>
+                {form.label ? (
+                  <label className='labels'>
+                    {form.label}
+                    <input
+                      className='fields'
+                      name={form.label}
+                      onChange={(event) => handleFormChange(event, index)}
+                      value={form.value}
+                    />
+                  </label>
+                ) : (
+                  <div>
+                    <label className='labels-config'>
+                      <input
+                        className='fields-config'
+                        name='label'
+                        placeholder='New Field Name'
+                        onChange={(event) => handleFormChange(event, index)}
+                        value={form.label}
+                      />
+                    </label>
+                    <label className='labels-config'>
+                      <input
+                        className='fields'
+                        name='value'
+                        placeholder='Value'
+                        onChange={(event) => handleFormChange(event, index)}
+                        value={form.value}
+                      />
+                    </label>
+                    <button className='config-buttons' onClick={() => removeFields(index)}>
+                      Remove
+                    </button>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        ))}
-    </form>
-        <button className='config-buttons' onClick={addFields}>Add Another Field</button>
-        <br />
-        <button className='config-buttons' onClick={submit}>Submit</button>
-      
+            ))}
+      </form>
+      <button className='config-buttons' onClick={addFields}>
+        Add Another Field
+      </button>
+      <br />
+      <button className='config-buttons' onClick={submit}>
+        Submit
+      </button>
     </div>
   );
-  
-  };
+};
 
 export default PatientForm;

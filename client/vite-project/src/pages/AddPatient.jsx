@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import PatientForm from "../components/PatientForm";
+import PatientForm from '../components/PatientForm';
 import '../styles/add.css';
 
 const AddPatients = () => {

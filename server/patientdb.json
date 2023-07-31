@@ -12,13 +12,17 @@
         "state": "CA",
         "zipCode": "95661"
       },
+      "id": 1,
       "additionalFields": [
         {
           "label": "College",
           "value": ""
+        },
+        {
+          "label": "Major",
+          "value": ""
         }
-      ],
-      "id": 1
+      ]
     },
     {
       "firstName": "Jane",
@@ -32,13 +36,17 @@
         "state": "MI",
         "zipCode": "48342"
       },
+      "id": 2,
       "additionalFields": [
         {
           "label": "College",
           "value": ""
+        },
+        {
+          "label": "Major",
+          "value": ""
         }
-      ],
-      "id": 2
+      ]
     },
     {
       "firstName": "Rudy",
@@ -56,6 +64,10 @@
         {
           "label": "College",
           "value": "UC Berkeley"
+        },
+        {
+          "label": "Major",
+          "value": "Computer Science/IEOR"
         }
       ],
       "id": 3

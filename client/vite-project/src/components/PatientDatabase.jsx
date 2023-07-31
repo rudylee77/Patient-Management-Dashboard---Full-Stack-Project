@@ -74,7 +74,7 @@ const PatientDatabase = ({ data, filters }) => {
       }
     });
   };
-
+  
   const getAdditionalFieldValue = (patient, fieldKey) => {
     const labelRegex = /\[([0-9]+)\]\.value/;
     const match = fieldKey.match(labelRegex);
@@ -86,7 +86,7 @@ const PatientDatabase = ({ data, filters }) => {
     }
     return '';
   };
-
+  
   const sortedPatients = [...filteredPatients].sort((a, b) => {
     if (sortConfig.key === 'address') {
       const aValue = a.address.street; // Sort by address.street
@@ -102,13 +102,14 @@ const PatientDatabase = ({ data, filters }) => {
       return sortConfig.direction === 'asc' ? a[sortConfig.key].localeCompare(b[sortConfig.key]) : b[sortConfig.key].localeCompare(a[sortConfig.key]);
     } else if (sortConfig.key.startsWith('additionalFields[')) {
       const index = Number(sortConfig.key.match(/\d+/)[0]);
-      const aValue = getAdditionalFieldValue(a, index);
-      const bValue = getAdditionalFieldValue(b, index);
+      const aValue = getAdditionalFieldValue(a, sortConfig.key);
+      const bValue = getAdditionalFieldValue(b, sortConfig.key);
       return sortConfig.direction === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
     }
-
+  
     return sortConfig.direction === 'asc' ? a[sortConfig.key] - b[sortConfig.key] : b[sortConfig.key] - a[sortConfig.key];
   });
+  
 
   const getFullName = (patient) => {
     let fullName = patient.firstName;
@@ -181,4 +182,3 @@ const PatientDatabase = ({ data, filters }) => {
 };
 
 export default PatientDatabase;
-
