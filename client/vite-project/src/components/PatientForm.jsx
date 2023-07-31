@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const PatientForm = ({ patientData, initialConfigFormFields }) => {
+const PatientForm = ({ patientData }) => {
   const [formData, setFormData] = useState({
     firstName: '',
     middleName: '',
@@ -43,13 +43,11 @@ const PatientForm = ({ patientData, initialConfigFormFields }) => {
         setconfigFormFields([]);
       }
     } else {
-      if (initialConfigFormFields) {
-        setconfigFormFields([...initialConfigFormFields]);
-      } else {
-        setconfigFormFields([]);
-      }
+      // If there is no patientData, it means we are adding a new patient
+      // Set the initial configFormFields to an empty array
+      setconfigFormFields([]);
     }
-  }, [patientData, initialConfigFormFields]);
+  }, [patientData]);
 
   const [configFormFields, setconfigFormFields] = useState([]);
 
@@ -73,12 +71,9 @@ const PatientForm = ({ patientData, initialConfigFormFields }) => {
   };
 
   const handleFormChange = (event, index) => {
-    const { name, value } = event.target;
-    setconfigFormFields((prevFields) => {
-      const updatedFields = [...prevFields];
-      updatedFields[index][name] = value;
-      return updatedFields;
-    });
+    let data = [...configFormFields];
+    data[index][event.target.name] = event.target.value;
+    setconfigFormFields(data);
   };
   
   const submit = (e) => {
@@ -284,6 +279,7 @@ const PatientForm = ({ patientData, initialConfigFormFields }) => {
     
     {configFormFields.map((form, index) => (
           <div key={index}>
+            {/* Check if the label exists in patientData.additionalFields */}
             {patientData.additionalFields &&
             patientData.additionalFields.find(field => field.label === form.label) ? (
               <label className='labels'>
@@ -291,6 +287,7 @@ const PatientForm = ({ patientData, initialConfigFormFields }) => {
                 <input
                   className='fields'
                   name={form.label}
+                  placeholder={form.label}
                   onChange={event => handleFormChange(event, index)}
                   value={form.value}
                 />
@@ -322,16 +319,14 @@ const PatientForm = ({ patientData, initialConfigFormFields }) => {
             )}
           </div>
         ))}
-      </form>
-      <button className='config-buttons' onClick={addFields}>
-        Add Another Field
-      </button>
-      <br />
-      <button className='config-buttons' onClick={submit}>
-        Submit
-      </button>
+    </form>
+        <button className='config-buttons' onClick={addFields}>Add Another Field</button>
+        <br />
+        <button className='config-buttons' onClick={submit}>Submit</button>
+      
     </div>
   );
-};
+  
+  };
 
 export default PatientForm;

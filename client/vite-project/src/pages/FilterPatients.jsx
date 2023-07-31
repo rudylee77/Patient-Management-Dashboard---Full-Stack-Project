@@ -46,8 +46,9 @@ const FilterPatients = () => {
   };
 
   const handleAddFilter = () => {
-    setFilters([...filters, { selectedField: '', filterValue: '' }]);
+    setFilters([...filters, { selectedField: '', filterValue: '', isAdditionalField: false }]);
   };
+  
 
   const handleRemoveFilter = (index) => {
     const newFilters = [...filters];
@@ -57,9 +58,12 @@ const FilterPatients = () => {
 
   const handleChangeFilterField = (index, value) => {
     const newFilters = [...filters];
+    const isAdditionalField = value.startsWith('additionalFields[');
     newFilters[index].selectedField = value;
+    newFilters[index].isAdditionalField = isAdditionalField;
     setFilters(newFilters);
   };
+  
 
   const handleChangeFilterValue = (index, value) => {
     const newFilters = [...filters];
