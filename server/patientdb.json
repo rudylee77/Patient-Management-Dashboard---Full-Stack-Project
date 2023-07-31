@@ -36,7 +36,6 @@
         "state": "MI",
         "zipCode": "48342"
       },
-      "id": 2,
       "additionalFields": [
         {
           "label": "College",
@@ -46,7 +45,8 @@
           "label": "Major",
           "value": ""
         }
-      ]
+      ],
+      "id": 2
     },
     {
       "firstName": "Rudy",

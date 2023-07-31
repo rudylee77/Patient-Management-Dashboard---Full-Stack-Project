@@ -19,6 +19,7 @@ const PatientForm = ({ patientData, initialConfigFormFields }) => {
   const navigate = useNavigate();
   const [usedLabels, setUsedLabels] = useState([]);
   const [temporaryFields, setTemporaryFields] = useState([]);
+  const [newFieldsData, setNewFieldsData] = useState({});
 
   useEffect(() => {
     if (patientData && patientData.id) {
@@ -112,32 +113,30 @@ const PatientForm = ({ patientData, initialConfigFormFields }) => {
 
   const handleFormChange = (event, index) => {
     const { name, value } = event.target;
-    if (name === 'label') {
-      // Handle changes to the label field separately
-      setTemporaryFields((prevFields) => {
+    if (index < configFormFields.length) {
+      // Handle changes to existing additional fields
+      setconfigFormFields((prevFields) => {
         const updatedFields = [...prevFields];
-        updatedFields[index] = {
-          ...updatedFields[index],
-          label: value, // Update the label field at the given index
-        };
+        if (name === 'label') {
+          updatedFields[index].label = value;
+        } else {
+          updatedFields[index].value = value;
+        }
         return updatedFields;
       });
     } else {
-      // Handle changes to the value field separately
-      setTemporaryFields((prevFields) => {
-        const updatedFields = [...prevFields];
-        updatedFields[index] = {
-          ...updatedFields[index],
-          value: value, // Update the value field at the given index
-        };
-        return updatedFields;
-      });
+      // Handle changes to the temporary labels and values for new additional fields
+      setNewFieldsData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
     }
   };
+  
 
   const submit = (e) => {
     e.preventDefault();
-
+  
     // Prepare the patient data to be sent to the server
     const newPatientData = {
       firstName: formData.firstName,
@@ -151,14 +150,31 @@ const PatientForm = ({ patientData, initialConfigFormFields }) => {
         state: formData.address.state,
         zipCode: formData.address.zipCode,
       },
-      additionalFields: configFormFields.map((field, index) => ({
-        ...field,
-        value: temporaryFields[index]?.value || field.value,
-      })),
+      additionalFields: [
+        ...configFormFields.map((field, index) => ({
+          ...field,
+          value: temporaryFields[index]?.value || field.value,
+        })),
+        ...Object.values(newFieldsData).map((field) => ({
+          label: field.label,
+          value: field.value,
+        })),
+      ],
     };
-
+  
     if (patientData && patientData.id) {
       // If patientData has an ID, it means we are editing an existing patient
+      // Check if any additional fields' labels were used by other patients
+      const usedFieldLabels = patientData.additionalFields.map((field) => field.label);
+      configFormFields.forEach((field) => {
+        if (!usedFieldLabels.includes(field.label)) {
+          newPatientData.additionalFields.push({
+            label: field.label,
+            value: field.value,
+          });
+        }
+      });
+  
       // Use PUT or PATCH request for updating
       fetch(`http://localhost:4000/patients/${patientData.id}`, {
         method: 'PUT', // Use 'PUT' or 'PATCH' method for updating
@@ -210,13 +226,11 @@ const PatientForm = ({ patientData, initialConfigFormFields }) => {
   };
 
   const addFields = () => {
-    let object = {
-      label: '',
-      value: '',
-    };
-    setTemporaryFields((prevFields) => [...prevFields, object]);
-  
-    setconfigFormFields([...configFormFields, object]);
+    if (newFieldsData.label !== '' && newFieldsData.value !== '') {
+      // Only add the new field if both label and value are not empty
+      setconfigFormFields((prevFields) => [...prevFields, { ...newFieldsData }]);
+      setNewFieldsData({ label: '', value: '' }); // Reset the temporary fields
+    }
   };
 
   const removeFields = (index) => {
@@ -332,7 +346,7 @@ const PatientForm = ({ patientData, initialConfigFormFields }) => {
                   className='fields'
                   name={field.label}
                   placeholder={field.label}
-                  onChange={event => handleFormChange(event, index)}
+                  onChange={(event) => handleFormChange(event, index)}
                   value={field.value}
                 />
               </label>
@@ -347,7 +361,7 @@ const PatientForm = ({ patientData, initialConfigFormFields }) => {
                   className='fields'
                   name={form.label}
                   onChange={(event) => handleFormChange(event, index)}
-                  value={temporaryFields[index]?.value || form.value} 
+                  value={form.value} 
                 />
               </label>
             ) : (
@@ -358,7 +372,7 @@ const PatientForm = ({ patientData, initialConfigFormFields }) => {
                     name='label'
                     placeholder='New Field Name'
                     onChange={(event) => handleFormChange(event, index + configFormFields.length)}
-                    value={temporaryFields[index]?.value || form.value}
+                    value={newFieldsData[index]?.label} // Use temporary label value
                   />
                 </label>
                 <label className='labels-config'>
@@ -367,10 +381,10 @@ const PatientForm = ({ patientData, initialConfigFormFields }) => {
                     name='value'
                     placeholder='Value'
                     onChange={(event) => handleFormChange(event, index + configFormFields.length)}
-                    value={temporaryFields[index]?.value || form.value}
+                    value={newFieldsData[index]?.value} // Use temporary value value
                   />
                 </label>
-                <button className='config-buttons' onClick={() => removeFields(index)}>
+                <button className='config-buttons' onClick={() => removeFields(index + configFormFields.length)}>
                   Remove
                 </button>
               </div>
@@ -387,6 +401,9 @@ const PatientForm = ({ patientData, initialConfigFormFields }) => {
       </button>
     </div>
   );
+  
+
+
 };
 
 export default PatientForm;
