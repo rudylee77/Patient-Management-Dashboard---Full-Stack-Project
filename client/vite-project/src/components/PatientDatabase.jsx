@@ -20,42 +20,58 @@ const PatientDatabase = ({ data, filters }) => {
     return additionalField ? additionalField.value : '';
   };
 
-  const filteredPatients = data.filter((patient) => {
-    return filters.every((filter) => {
-      const { selectedField, filterValue } = filter;
-  
-      if (selectedField && filterValue) {
-        if (selectedField in fieldLabels) {
-          var fieldValue =  patient[selectedField];   
-          if (selectedField === 'firstName') {
-            // For firstName, perform case-insensitive filtering on the firstName property only
-            return fieldValue.toLowerCase().startsWith(filterValue.toLowerCase());
-          } else if (selectedField === 'address') {
-            // For address, perform case-insensitive filtering on the full address string
-            const addressString = `${patient.address.street} ${patient.address.city} ${patient.address.state} ${patient.address.zipCode}`;
-            return addressString.toLowerCase().startsWith(filterValue.toLowerCase());
-          } else if (typeof fieldValue === 'string') {
-            return fieldValue.toLowerCase().startsWith(filterValue.toLowerCase());
-          } else if (Array.isArray(fieldValue)) {
-            // Check for the selected field in additionalFields array and filter based on its value
-            const additionalFieldValue = getAdditionalFieldValueByLabel(patient, selectedField);
-            return additionalFieldValue.toLowerCase().includes(filterValue.toLowerCase());
+  const [filteredPatients, setFilteredPatients] = useState([]);
+
+  useEffect(() => {
+    // Filter the patients based on the current filters
+    const filteredData = data.filter((patient) => {
+      return filters.every((filter) => {
+        const { selectedField, filterValue } = filter;
+
+        if (selectedField && filterValue) {
+          if (selectedField in fieldLabels) {
+            var fieldValue =  patient[selectedField];   
+            if (selectedField === 'firstName') {
+              // For firstName, perform case-insensitive filtering on the firstName property only
+              return fieldValue.toLowerCase().startsWith(filterValue.toLowerCase());
+            } else if (selectedField === 'address') {
+              // For address, perform case-insensitive filtering on the full address string
+              const addressString = `${patient.address.street} ${patient.address.city} ${patient.address.state} ${patient.address.zipCode}`;
+              return addressString.toLowerCase().startsWith(filterValue.toLowerCase());
+            } else if (typeof fieldValue === 'string') {
+              return fieldValue.toLowerCase().startsWith(filterValue.toLowerCase());
+            } else if (Array.isArray(fieldValue)) {
+              // Check for the selected field in additionalFields array and filter based on its value
+              const additionalFieldValue = getAdditionalFieldValueByLabel(patient, selectedField);
+              return additionalFieldValue.toLowerCase().includes(filterValue.toLowerCase());
+            } else {
+              return false;
+            }
           } else {
-            return false;
-          }
-        } else {
-          for (const i in patient['additionalFields']) {
-            if (selectedField == patient['additionalFields'][i].label) {
-              return (patient['additionalFields'][i].value).toLowerCase().startsWith(filterValue.toLowerCase());
+            for (const i in patient['additionalFields']) {
+              if (selectedField == patient['additionalFields'][i].label) {
+                return (patient['additionalFields'][i].value).toLowerCase().startsWith(filterValue.toLowerCase());
+              }
             }
           }
+        } else {
+          return true;
         }
-      } else {
-        return true;
-      }
+      });
     });
+
+    setFilteredPatients(filteredData);
+  }, [data, filters]);
+
+  const uniqueAdditionalFieldLabels = new Set();
+    data.forEach((patient) => {
+      if (patient.additionalFields) {
+        patient.additionalFields.forEach((field) => {
+          uniqueAdditionalFieldLabels.add(field.label);
+        });
+      }
   });
-  
+
   // Function to handle row click and navigate to EditPatient page with patient data
   const handleRowClick = (patient) => {
     navigate('/edit', { state: { patientData: patient } });
@@ -75,7 +91,32 @@ const PatientDatabase = ({ data, filters }) => {
       }
     });
   };
-  
+
+  const handleDeleteAdditionalField = async (index) => {
+    try {
+      const additionalFieldLabel = Array.from(uniqueAdditionalFieldLabels)[index];
+
+      // Send a PATCH request to the backend to remove the additional field
+      await fetch(`http://localhost:4000/removeAdditionalField/${additionalFieldLabel}`, {
+        method: 'PATCH',
+      });
+
+      // Update the filteredPatients array to reflect the changes
+      setFilteredPatients((prevFilteredPatients) =>
+        prevFilteredPatients.map((patient) => {
+          if (patient.additionalFields) {
+            patient.additionalFields = patient.additionalFields.filter(
+              (field) => field.label !== additionalFieldLabel
+            );
+          }
+          return patient;
+        })
+      );
+    } catch (error) {
+      console.error('Error deleting additional field:', error);
+    }
+  };
+
   const getAdditionalFieldValue = (patient, fieldKey) => {
     const labelRegex = /\[([0-9]+)\]\.value/;
     const match = fieldKey.match(labelRegex);
@@ -122,15 +163,6 @@ const PatientDatabase = ({ data, filters }) => {
     }
     return fullName;
   };
-  
-  const uniqueAdditionalFieldLabels = new Set();
-    data.forEach((patient) => {
-      if (patient.additionalFields) {
-        patient.additionalFields.forEach((field) => {
-          uniqueAdditionalFieldLabels.add(field.label);
-        });
-      }
-  });
 
   return (
     <div className='patient-database-container'>
@@ -152,6 +184,9 @@ const PatientDatabase = ({ data, filters }) => {
             {Array.from(uniqueAdditionalFieldLabels).map((label, index) => (
               <th key={index} onClick={() => handleHeaderClick(`additionalFields[${index}].value`)}>
                 {label} {sortConfig.key === `additionalFields[${index}].value` && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+                <button onClick={() => handleDeleteAdditionalField(index)} className='header-button'>
+                  X
+                </button>
               </th>
             ))}
           </tr>
@@ -183,5 +218,3 @@ const PatientDatabase = ({ data, filters }) => {
 };
 
 export default PatientDatabase;
-
-
