@@ -19,7 +19,7 @@ const PatientForm = ({ patientData, initialConfigFormFields }) => {
   const navigate = useNavigate();
   const [usedLabels, setUsedLabels] = useState([]);
   const [temporaryFields, setTemporaryFields] = useState([]);
-  const [newFieldsData, setNewFieldsData] = useState({});
+  const [newFieldsData, setNewFieldsData] = useState([]);
 
   useEffect(() => {
     if (patientData && patientData.id) {
@@ -126,17 +126,31 @@ const PatientForm = ({ patientData, initialConfigFormFields }) => {
       });
     } else {
       // Handle changes to the temporary labels and values for new additional fields
-      setNewFieldsData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
+      setNewFieldsData((prevData) => {
+        const updatedData = { ...prevData };
+        updatedData[name] = value;
+        return updatedData;
+      });
+    }
+  };
+
+  const addFields = () => {
+    if (newFieldsData.label !== '' && newFieldsData.value !== '') {
+      // Only add the new field if both label and value are not empty
+      setconfigFormFields((prevFields) => [...prevFields, { ...newFieldsData }]);
+      setNewFieldsData({ label: '', value: '' }); // Reset the temporary fields
     }
   };
   
+    const removeFields = (index) => {
+      let data = [...configFormFields];
+      data.splice(index, 1);
+      setconfigFormFields(data);
+    };
 
   const submit = (e) => {
     e.preventDefault();
-  
+
     // Prepare the patient data to be sent to the server
     const newPatientData = {
       firstName: formData.firstName,
@@ -150,31 +164,14 @@ const PatientForm = ({ patientData, initialConfigFormFields }) => {
         state: formData.address.state,
         zipCode: formData.address.zipCode,
       },
-      additionalFields: [
-        ...configFormFields.map((field, index) => ({
-          ...field,
-          value: temporaryFields[index]?.value || field.value,
-        })),
-        ...Object.values(newFieldsData).map((field) => ({
-          label: field.label,
-          value: field.value,
-        })),
-      ],
+      additionalFields: configFormFields.map((field, index) => ({
+        ...field,
+        value: temporaryFields[index]?.value || field.value,
+      })),
     };
-  
+
     if (patientData && patientData.id) {
       // If patientData has an ID, it means we are editing an existing patient
-      // Check if any additional fields' labels were used by other patients
-      const usedFieldLabels = patientData.additionalFields.map((field) => field.label);
-      configFormFields.forEach((field) => {
-        if (!usedFieldLabels.includes(field.label)) {
-          newPatientData.additionalFields.push({
-            label: field.label,
-            value: field.value,
-          });
-        }
-      });
-  
       // Use PUT or PATCH request for updating
       fetch(`http://localhost:4000/patients/${patientData.id}`, {
         method: 'PUT', // Use 'PUT' or 'PATCH' method for updating
@@ -223,20 +220,6 @@ const PatientForm = ({ patientData, initialConfigFormFields }) => {
           console.error('Error adding patient:', error);
         });
     }
-  };
-
-  const addFields = () => {
-    if (newFieldsData.label !== '' && newFieldsData.value !== '') {
-      // Only add the new field if both label and value are not empty
-      setconfigFormFields((prevFields) => [...prevFields, { ...newFieldsData }]);
-      setNewFieldsData({ label: '', value: '' }); // Reset the temporary fields
-    }
-  };
-
-  const removeFields = (index) => {
-    let data = [...configFormFields];
-    data.splice(index, 1);
-    setconfigFormFields(data);
   };
 
   return (
