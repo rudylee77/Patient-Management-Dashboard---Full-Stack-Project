@@ -7,7 +7,7 @@
 ***2. To run the client, open another terminal and navigate to the vite-project folder with 'cd client/vite-project'. Run 'npm run dev' (you may have to run 'npm install vite' first). On your browser go to 'http://localhost:5173/'***
 
 ***Login/Register***  
-> **Features:** Basic Form to handle login and register requests (real-world applications would be more secure)
+> **Features:** Basic Form to handle login and register requests (real-world applications would be more secure)  
 > **Admin Code: 12345**
   
 ***Patient Dashboard is complete!***  
