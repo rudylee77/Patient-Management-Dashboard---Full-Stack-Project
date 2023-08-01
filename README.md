@@ -1,5 +1,5 @@
 # Patient-Management-Dashboard---Full-Stack-Project
-## Web full-stack product that allows providers to easily grab, edit, and view patient data  
+### Web full-stack product that allows providers to easily grab, edit, and view patient data  
 
 ***1. To run the servers, open two terminals and navigate them to the server folder with 'cd server'. Run node 'app.js' and node 'patientdb.js'***  
 
