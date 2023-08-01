@@ -1,20 +1,40 @@
 const users = [
-    {
-      id: 1,
-      username: "rudy",
-      password: "password",
-    },
-  ];
-  
-  exports.loginUser = (req, res) => {
-    const { username, password } = req.body;
-    const user = users.find((user) => user.username === username);
-  
-    if (!user || user.password !== password) {
-      return res.status(401).json({ error: "Invalid credentials" });
-    }
-  
-    // For this example, we're just sending back the user details, but in a real application,
-    // you would generate a token (JWT) here and include it in the response.
-    res.json({ user });
+  {
+    id: 1,
+    username: "rudy",
+    password: "password",
+  },
+];
+
+exports.loginUser = (req, res) => {
+  const { username, password } = req.body;
+  const user = users.find((user) => user.username === username);
+
+  if (!user || user.password !== password) {
+    return res.status(401).json({ error: "Invalid credentials" });
+  }
+
+  res.json({ user });
+};
+
+exports.registerUser = (req, res) => {
+  const { username, password } = req.body;
+  const newUser = {
+    id: users.length + 1,
+    username,
+    password,
   };
+
+  users.push(newUser);
+
+  res.json({ user: newUser });
+};
+
+exports.checkUsername = (req, res) => {
+  const { username } = req.body;
+
+  // Check if the username already exists in the users array
+  const usernameExists = users.some((user) => user.username === username);
+
+  res.json({ usernameExists });
+};

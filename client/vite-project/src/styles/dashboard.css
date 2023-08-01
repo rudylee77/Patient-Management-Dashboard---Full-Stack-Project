@@ -1,60 +1,60 @@
 body {
-    font-family: "Andale Mono";
-    margin: 0;
-    padding: 0;
-  }
-  
+  font-family: "Andale Mono";
+  margin: 0;
+  padding: 0;
+}
 
-  .dashboard-container {
-    margin: auto;
-  }
-  
-  .title {
-    text-align: center;
-    padding: 30px;
-  }
-  
-  .database {
-    margin-top: 20px;
-    border-collapse: collapse;
-    width: 100%;
-  }
-  
-  .database td, .database th {
-    border: 2px solid black;
-    padding: 8px;
-  }
-  
-  .database tr:nth-child(even){background-color: #fdf0da;}
-  
-  .database tr:hover {
-    background-color: #ddd;
-    cursor: pointer;
-  }
-  
-  .database th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: #ed762e;
-    color: white;
-    cursor: pointer;
 
-  }
+.dashboard-container {
+  margin: auto;
+}
 
-  .filter-add-button {
-    text-decoration: none;
-    border-radius: 8px;
-    border: 1px solid transparent;
-    padding: 0.6em 1.2em;
-    font-size: 1em;
-    font-weight: 500;
-    font-family: inherit;
-    background-color: #ed762e;
-    color: white;
-    margin: 20px;
-  }
+.title {
+  text-align: center;
+  padding: 30px;
+}
 
-  .header-button {
-    float: right;
-  }
+.database {
+  margin-top: 20px;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.database td, .database th {
+  border: 2px solid black;
+  padding: 8px;
+}
+
+.database tr:nth-child(even){background-color: #fdf0da;}
+
+.database tr:hover {
+  background-color: #ddd;
+  cursor: pointer;
+}
+
+.database th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #ed762e;
+  color: white;
+  cursor: pointer;
+
+}
+
+.filter-add-button {
+  text-decoration: none;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #ed762e;
+  color: white;
+  margin: 20px;
+}
+
+.header-button {
+  float: right;
+}
