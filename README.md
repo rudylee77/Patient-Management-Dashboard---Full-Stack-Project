@@ -14,8 +14,6 @@ password: password
 > **Features:** Column Sorting (click on Header column in Dashboard), Filtering by Field Equality, Remove Unwanted Fields  
 > **More Possible Features:** Removing Patients from Dashboard  
   
-***Patient Form is almost complete:***  
-> **Features:** Basic Form, Edit Patients (click on Patient row in Dashboard)  
-> **In Dev:** Configurable Form to add more fields  
+***Patient Form is complete!***  
+> **Features:** Basic Form, Edit Patients (click on Patient row in Dashboard), Configurable Form to add more fields  
 > **More Possible Features:** Dropdowns/Number Input fields  
-
