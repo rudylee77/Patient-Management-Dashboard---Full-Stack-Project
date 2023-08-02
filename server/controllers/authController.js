@@ -32,8 +32,6 @@ exports.registerUser = (req, res) => {
 
 exports.checkUsername = (req, res) => {
   const { username } = req.body;
-
-  // Check if the username already exists in the users array
   const usernameExists = users.some((user) => user.username === username);
 
   res.json({ usernameExists });

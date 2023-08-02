@@ -32,18 +32,12 @@ const PatientDatabase = ({ data, filters }) => {
           if (selectedField in fieldLabels) {
             var fieldValue =  patient[selectedField];   
             if (selectedField === 'firstName') {
-              // For firstName, perform case-insensitive filtering on the firstName property only
               return fieldValue.toLowerCase().startsWith(filterValue.toLowerCase());
             } else if (selectedField === 'address') {
-              // For address, perform case-insensitive filtering on the full address string
               const addressString = `${patient.address.street} ${patient.address.city} ${patient.address.state} ${patient.address.zipCode}`;
               return addressString.toLowerCase().startsWith(filterValue.toLowerCase());
             } else if (typeof fieldValue === 'string') {
               return fieldValue.toLowerCase().startsWith(filterValue.toLowerCase());
-            } else if (Array.isArray(fieldValue)) {
-              // Check for the selected field in additionalFields array and filter based on its value
-              const additionalFieldValue = getAdditionalFieldValueByLabel(patient, selectedField);
-              return additionalFieldValue.toLowerCase().includes(filterValue.toLowerCase());
             } else {
               return false;
             }

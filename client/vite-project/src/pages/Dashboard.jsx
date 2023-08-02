@@ -1,4 +1,3 @@
-// Dashboard.jsx
 import React, { useEffect, useState } from 'react';
 import '../styles/dashboard.css';
 import PatientDatabase from '../components/PatientDatabase';

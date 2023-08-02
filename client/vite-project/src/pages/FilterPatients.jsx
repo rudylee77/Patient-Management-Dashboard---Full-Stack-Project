@@ -12,7 +12,7 @@ const FilterPatients = () => {
     fetch('http://localhost:4000/patients')
       .then((response) => response.json())
       .then((data) => {
-        // Extract the available field options from the patient data, excluding 'id'
+        // Extract the available field options from the patient data, excluding 'id' and 'additionalFields'
         const allFieldsSet = new Set();
         data.forEach((patient) => {
           Object.keys(patient).forEach((field) => {
@@ -42,7 +42,7 @@ const FilterPatients = () => {
     dateOfBirth: 'Date of Birth',
     status: 'Status',
     address: 'Address',
-    // Add more fields if needed
+    // Additional Fields
   };
 
   const handleAddFilter = () => {
