@@ -147,6 +147,18 @@ const PatientForm = ({ patientData, initialConfigFormFields }) => {
     setconfigFormFields(updatedConfigFormFields);
   };
 
+  const removePatient = async (id) => {
+    try {
+      // Send a PATCH request to the backend to remove the additional patient
+      await fetch(`http://localhost:4000/removePatient/${id}`, {
+        method: 'PATCH',
+      });
+      navigate('/dashboard'); // Navigate to the Dashboard after successful delete
+    } catch (error) {
+      console.error('Error deleting additional field:', error);
+    }
+  };
+
   const submit = (e) => {
     e.preventDefault();
     // Prepare the patient data to be sent to the server
@@ -366,8 +378,7 @@ const PatientForm = ({ patientData, initialConfigFormFields }) => {
                 <button
                   type="button"
                   className='config-buttons'
-                  onClick={() => removeFields(index)}
-                >
+                  onClick={() => removeFields(index)}>
                   Remove
                 </button>
               </div>
@@ -382,6 +393,13 @@ const PatientForm = ({ patientData, initialConfigFormFields }) => {
       <button className='config-buttons' onClick={submit}>
         Submit
       </button>
+      <br />
+      <br />
+      {patientData && patientData.id && (
+        <button className='config-buttons-red' onClick={() => removePatient(patientData.id)}>
+          Remove Patient
+        </button>
+      )}
     </div>
   );
 };

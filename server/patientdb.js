@@ -72,6 +72,25 @@ server.patch('/removeAdditionalField/:additionalFieldLabel', async (req, res) =>
   }
 });
 
+server.patch('/removePatient/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const patients = await router.db.get('patients').value();
+    
+    // Find the index of the patient with the matching ID
+    const indexToRemove = patients.findIndex(patient => patient.id === id);
+    
+    patients.splice(indexToRemove, 1);
+    await router.db.set('patients', patients).write();
+    res.json({ message: 'Patient removed successfully' });
+    
+  } catch (err) {
+    console.error('Error processing the request:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 server.use(router);
 
 server.listen(PORT, () => {
