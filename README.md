@@ -10,9 +10,9 @@
 > **Admin Code: 12345**
   
 ***Patient Dashboard is complete!***  
-> **Features:** Column Sorting (click on Header column in Dashboard), Filtering by Field Equality, Remove Unwanted Fields  
-> **More Possible Features:** Removing Patients from Dashboard  
+> **Features:** Column Sorting (click on Header column in Dashboard), Filtering by Field Equality, Remove Unwanted Fields, Removing Patients from Dashboard  
+> **More Possible Features:** Patient Analytics, Show Provider Programs/Services    
   
 ***Patient Form is complete!***  
-> **Features:** Standard Form, Edit Patients (click on Patient row in Dashboard), Configurable Form to add more fields  
-> **More Possible Features:** Dropdowns/Number Input fields  
+> **Features:** Standard Form, Edit Patients (click on Patient row in Dashboard), Configurable Form to add more fields, Dropdowns for Text/Number/Date Input fields  
+> **More Possible Features:** Adding Multiple Addresses, Patient History, Employee/Department Forms
