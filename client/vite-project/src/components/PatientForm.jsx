@@ -98,6 +98,31 @@ const PatientForm = ({ patientData, initialConfigFormFields }) => {
     }));
   };
 
+  function changeInputType(oldObject, newType) {
+    const newObject = document.createElement('input');
+    newObject.type = newType;
+    
+    if (oldObject.size) newObject.size = oldObject.size;
+    if (oldObject.value) newObject.value = oldObject.value;
+    if (oldObject.name) newObject.name = oldObject.name;
+    if (oldObject.id) newObject.id = oldObject.id;
+    if (oldObject.className) newObject.className = oldObject.className;
+  
+    oldObject.parentNode.replaceChild(newObject, oldObject);
+    return newObject;
+  }
+
+  const handleTypeChange = (e, index) => {
+    const { value } = e.target;
+
+    const inputElement = document.querySelector(`input[name="value-${index}"]`);
+    changeInputType(inputElement, value);
+
+    const updatedFieldsData = [...newFieldsData];
+    updatedFieldsData[index][`type-${index}`] = value;
+    setNewFieldsData(updatedFieldsData);
+  };
+
   const handleAddressChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -108,6 +133,46 @@ const PatientForm = ({ patientData, initialConfigFormFields }) => {
       },
     }));
   };
+
+  const address = () => {
+    return (
+      <div>
+        <input
+          className='fields-address'
+          type="text"
+          placeholder="Street"
+          value={formData.address.street}
+          onChange={handleAddressChange}
+          name="street"
+        />
+        <input
+          className='fields-address'
+          type="text"
+          placeholder="City"
+          value={formData.address.city}
+          onChange={handleAddressChange}
+          name="city"
+        />
+        <input
+          className='fields-address'
+          type="text"
+          placeholder="State"
+          value={formData.address.state}
+          onChange={handleAddressChange}
+          name="state"
+        />
+        <input
+          className='fields-address'
+          type="text"
+          placeholder="Zip Code"
+          value={formData.address.zipCode}
+          onChange={handleAddressChange}
+          name="zipCode"
+        />
+      </div>
+    );
+  }
+  
 
   const handleFormChange = (event, index) => {
     const { name, value } = event.target;
@@ -178,6 +243,15 @@ const PatientForm = ({ patientData, initialConfigFormFields }) => {
         ...configFormFields, 
       ],
     };
+
+    var toBeRemoved = [];
+    for (let i = 0; i < newPatientData.additionalFields.length; i++) {
+      if (newPatientData.additionalFields[i].label == '' && newPatientData.additionalFields[i].value == '') {
+        toBeRemoved.push(i)
+      }
+    }
+    for (var i = toBeRemoved.length -1; i >= 0; i--)
+      newPatientData.additionalFields.splice(toBeRemoved[i],1);
 
     if (patientData && patientData.id) {
       // If patientData has an ID, it means we are editing an existing patient
@@ -289,40 +363,7 @@ const PatientForm = ({ patientData, initialConfigFormFields }) => {
         </label>
         <label className='labels'>
           Address
-          <div>
-            <input
-              className='fields-address'
-              type="text"
-              placeholder="Street"
-              value={formData.address.street}
-              onChange={handleAddressChange}
-              name="street"
-            />
-            <input
-              className='fields-address'
-              type="text"
-              placeholder="City"
-              value={formData.address.city}
-              onChange={handleAddressChange}
-              name="city"
-            />
-            <input
-              className='fields-address'
-              type="text"
-              placeholder="State"
-              value={formData.address.state}
-              onChange={handleAddressChange}
-              name="state"
-            />
-            <input
-              className='fields-address'
-              type="text"
-              placeholder="Zip Code"
-              value={formData.address.zipCode}
-              onChange={handleAddressChange}
-              name="zipCode"
-            />
-          </div>
+          {address()}
         </label>
         {patientData &&
           patientData.additionalFields &&
@@ -370,11 +411,21 @@ const PatientForm = ({ patientData, initialConfigFormFields }) => {
                   <input
                     className='fields'
                     name={`value-${index}`}
-                    placeholder='Value'
                     onChange={(event) => handleFormChange(event, index + configFormFields.length)}
                     value={newFieldsData[`value-${index}`]}
+                    type={newFieldsData[`type-${index}`]}
                   />
                 </label>
+                <select
+                  className='labels-config-select'
+                  name={`type-${index}`}
+                  onChange={(e) => handleTypeChange(e, index)}
+                  value={newFieldsData[`type-${index}`]}
+                >
+                  <option value="text">Text</option>
+                  <option value="number">Number</option>
+                  <option value="date">Date</option>
+                </select>
                 <button
                   type="button"
                   className='config-buttons'
