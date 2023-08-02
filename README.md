@@ -1,7 +1,7 @@
 # Patient-Management-Dashboard---Full-Stack-Project
 ### Web full-stack product that allows providers to easily grab, edit, and view patient data  
 
-***1. To run the servers, open two terminals and navigate them to the server folder with 'cd server'. Run node 'app.js' and node 'patientdb.js'***  
+***1. To run the servers, open two terminals and navigate them to the server folder with 'cd server'. Run 'node app.js' and 'node patientdb.js'***  
 
 ***2. To run the client, open another terminal and navigate to the vite-project folder with 'cd client/vite-project'. Run 'npm run dev' (you may have to run 'npm install vite' first). On your browser go to 'http://localhost:5173/'***  
 
